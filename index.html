@@ -1,0 +1,35 @@
+<input type="text" placeholder="first phoneme" id="first" />
+<input type="text" placeholder="second phoneme" id="second" />
+<button onclick="execute()">Search for matches</button> <br />
+<div id="result"></div>
+<script>
+  document.getElementById('result').innerHTML = 'Fetching results, please wait!'
+  var data
+  fetch('phoible.csv')
+    .then(t => t.text())
+    .then(t => {
+      data = t.split('\n').map(e => e.split(',').map(f => f.replace(/\"/g, '')))
+      document.getElementById('result').innerHTML = 'Data was fetched'
+    })
+  function execute() {
+    document.getElementById('result').innerHTML = 'Looking for good results!'
+    let response = []
+    let first = []
+    let second = []
+    let total = []
+    let firstPhoneme = document.getElementById('first').value
+    let secondPhoneme = document.getElementById('second').value
+    first = data
+      .filter(
+        e => e[6] == firstPhoneme && !e[7].split(' ').includes(secondPhoneme)
+      )
+      .map(e => e[3])
+    second = data
+      .filter(
+        e => e[6] == secondPhoneme && !e[7].split(' ').includes(firstPhoneme)
+      )
+      .map(e => e[3])
+    total = first.filter(e => second.includes(e))
+    document.getElementById('result').innerHTML = JSON.stringify(total)
+  }
+</script>
