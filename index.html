@@ -3,7 +3,8 @@
 <button onclick="execute()">Search for matches</button> <br />
 <div id="result"></div>
 <script>
-  document.getElementById('result').innerHTML = 'Fetching results, please wait!'
+  document.getElementById('result').innerHTML =
+    'Fetching external data, please wait!'
   var data
   fetch('phoible.csv')
     .then(t => t.text())
@@ -23,13 +24,15 @@
       .filter(
         e => e[6] == firstPhoneme && !e[7].split(' ').includes(secondPhoneme)
       )
-      .map(e => e[3])
+      .map(e => (e[4] == 'NA' ? e[3] : e[4]))
     second = data
       .filter(
         e => e[6] == secondPhoneme && !e[7].split(' ').includes(firstPhoneme)
       )
-      .map(e => e[3])
+      .map(e => (e[4] == 'NA' ? e[3] : e[4]))
     total = first.filter(e => second.includes(e))
-    document.getElementById('result').innerHTML = JSON.stringify(total)
+    document.getElementById('result').innerHTML = total
+      .toString()
+      .replace(/,/g, '<br />')
   }
 </script>
