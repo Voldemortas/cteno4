@@ -32,6 +32,7 @@
       .map(e => (e[4] == 'NA' ? e[3] : e[4]))
     total = first.filter(e => second.includes(e))
     document.getElementById('result').innerHTML = total
+      .sort((a, b) => (a > b ? 1 : -1))
       .toString()
       .replace(/,,/g, ',')
       .replace(/,,/g, ',')
